@@ -53,11 +53,18 @@ body {
   border-radius: 24px;
   display: grid;
   gap: 12px;
+  position: relative;
 }
 
 .hero-topline {
   display: grid;
   gap: 12px;
+}
+
+.hero-side {
+  display: grid;
+  gap: 8px;
+  align-content: start;
 }
 
 .hero-brand {
@@ -112,6 +119,40 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.edge-dictionary {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  max-width: 320px;
+}
+
+.edge-dictionary-title {
+  margin: 0 0 8px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.edge-dictionary-list {
+  display: grid;
+  gap: 6px;
+}
+
+.edge-dictionary-item {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.edge-dictionary-item strong {
+  color: var(--text);
+  font-weight: 700;
 }
 
 .hero-pill,
@@ -206,6 +247,8 @@ body {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  display: grid;
+  gap: 4px;
 }
 
 .accuracy-placeholder-label {
@@ -221,6 +264,13 @@ body {
   display: block;
   font-size: 1rem;
   font-weight: 700;
+}
+
+.accuracy-placeholder-note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
 }
 
 .featured-card {
@@ -532,15 +582,23 @@ body {
 
   .hero {
     padding: 22px;
+    padding-right: 360px;
   }
 
   .hero-topline {
-    grid-template-columns: 1fr auto;
-    align-items: start;
+    display: block;
   }
 
   .hero-brand {
     min-width: 0;
+  }
+
+  .hero-side {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    width: 320px;
+    justify-items: end;
   }
 
   .featured-grid {
@@ -585,6 +643,10 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .edge-dictionary {
+    max-width: none;
+  }
+
   .hero-brand {
     grid-template-columns: 48px 1fr;
     gap: 10px;
@@ -621,6 +683,11 @@ body {
   .hero,
   .featured-card {
     padding: 16px;
+  }
+
+  .hero-side {
+    position: static;
+    width: auto;
   }
 
   .game-summary {

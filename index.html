@@ -18,7 +18,19 @@
               <p class="hero-subtitle" id="hero-subtitle">Loading projected slates...</p>
             </div>
           </div>
-          <span class="hero-pill" id="generated-at">Updating...</span>
+          <div class="hero-side">
+            <span class="hero-pill" id="generated-at">Updating...</span>
+            <div class="edge-dictionary">
+              <p class="edge-dictionary-title">Similar Spot Win Rate</p>
+              <div class="edge-dictionary-list">
+                <span class="edge-dictionary-item"><strong>0.00 to 0.49 runs</strong> 55.7%</span>
+                <span class="edge-dictionary-item"><strong>0.50 to 0.74 runs</strong> 58.5%</span>
+                <span class="edge-dictionary-item"><strong>0.75 to 0.99 runs</strong> 61.8%</span>
+                <span class="edge-dictionary-item"><strong>1.00 to 1.49 runs</strong> 65.0%</span>
+                <span class="edge-dictionary-item"><strong>1.50+ runs</strong> 68.7%</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="hero-meta">
           <span class="hero-pill hero-pill-accent" id="game-count">0 games</span>
@@ -34,22 +46,25 @@
         <div class="featured-layout">
           <aside class="accuracy-placeholder">
             <div class="accuracy-placeholder-top">
-              <p class="accuracy-placeholder-eyebrow">Accuracy Tracker</p>
-              <h3>2026 season tracking</h3>
-              <p class="accuracy-placeholder-copy">Winner, runline, and total results will populate once 2026 games are graded.</p>
+              <p class="accuracy-placeholder-eyebrow">Best by Lane</p>
+              <h3>2025 ROI study</h3>
+              <p class="accuracy-placeholder-copy" id="roi-study-copy">Best historical confidence threshold for each lane.</p>
             </div>
             <div class="accuracy-placeholder-grid">
               <div class="accuracy-placeholder-metric">
-                <span class="accuracy-placeholder-label">Winner</span>
-                <span class="accuracy-placeholder-value">--</span>
+                <span class="accuracy-placeholder-label">Moneyline</span>
+                <span class="accuracy-placeholder-value" id="roi-moneyline-value">--</span>
+                <span class="accuracy-placeholder-note" id="roi-moneyline-note">--</span>
               </div>
               <div class="accuracy-placeholder-metric">
                 <span class="accuracy-placeholder-label">Runline</span>
-                <span class="accuracy-placeholder-value">--</span>
+                <span class="accuracy-placeholder-value" id="roi-runline-value">--</span>
+                <span class="accuracy-placeholder-note" id="roi-runline-note">--</span>
               </div>
               <div class="accuracy-placeholder-metric">
-                <span class="accuracy-placeholder-label">O/U</span>
-                <span class="accuracy-placeholder-value">--</span>
+                <span class="accuracy-placeholder-label">Total</span>
+                <span class="accuracy-placeholder-value" id="roi-total-value">--</span>
+                <span class="accuracy-placeholder-note" id="roi-total-note">--</span>
               </div>
             </div>
           </aside>
@@ -64,6 +79,12 @@
         </div>
 
         <div class="filters">
+          <button class="filter-chip is-active" data-day="all" data-label="All Dates">All Dates</button>
+          <button class="filter-chip" data-day="today" data-label="Today">Today</button>
+          <button class="filter-chip" data-day="tomorrow" data-label="Tomorrow">Tomorrow</button>
+        </div>
+
+        <div class="filters filters-secondary">
           <button class="filter-chip is-active" data-filter="all">All</button>
           <button class="filter-chip" data-filter="go_play">Go Play</button>
           <button class="filter-chip" data-filter="stay_away">Stay Away</button>

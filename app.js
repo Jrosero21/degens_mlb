@@ -5,12 +5,21 @@ const boardList = document.getElementById("board-list");
 const generatedAtEl = document.getElementById("generated-at");
 const gameCountEl = document.getElementById("game-count");
 const heroSubtitleEl = document.getElementById("hero-subtitle");
+const roiStudyCopyEl = document.getElementById("roi-study-copy");
+const roiMoneylineValueEl = document.getElementById("roi-moneyline-value");
+const roiMoneylineNoteEl = document.getElementById("roi-moneyline-note");
+const roiRunlineValueEl = document.getElementById("roi-runline-value");
+const roiRunlineNoteEl = document.getElementById("roi-runline-note");
+const roiTotalValueEl = document.getElementById("roi-total-value");
+const roiTotalNoteEl = document.getElementById("roi-total-note");
 const featuredCardTemplate = document.getElementById("featured-card-template");
 const gameCardTemplate = document.getElementById("game-card-template");
-const filterChips = [...document.querySelectorAll(".filter-chip")];
+const filterChips = [...document.querySelectorAll("[data-filter]")];
+const dayChips = [...document.querySelectorAll("[data-day]")];
 
 let allGames = [];
 let activeFilter = "all";
+let activeDay = "all";
 let expandedGameId = null;
 
 const TEAM_DISPLAY_MAP = {
@@ -44,6 +53,12 @@ const fmtSigned = (value, digits = 3) => {
   if (value == null) return "—";
   const num = Number(value);
   return `${num > 0 ? "+" : ""}${num.toFixed(digits)}`;
+};
+
+const fmtRoi = (value) => {
+  if (value == null) return "—";
+  const num = Number(value);
+  return `${num > 0 ? "+" : ""}${num.toFixed(1)}% ROI`;
 };
 
 const fmtDate = (value) => {
@@ -107,8 +122,50 @@ function renderFeatured(featured) {
   }
 }
 
+function renderRoiStudy(roiStudy) {
+  const lanes = roiStudy?.lanes || {};
+  const season = roiStudy?.season || "Historical ROI study";
+  roiStudyCopyEl.textContent = `${season}. Best historical confidence threshold for each lane.`;
+
+  const laneMap = [
+    [lanes.moneyline, roiMoneylineValueEl, roiMoneylineNoteEl],
+    [lanes.runline, roiRunlineValueEl, roiRunlineNoteEl],
+    [lanes.totals, roiTotalValueEl, roiTotalNoteEl],
+  ];
+
+  laneMap.forEach(([lane, valueEl, noteEl]) => {
+    if (!lane) {
+      valueEl.textContent = "--";
+      noteEl.textContent = "--";
+      return;
+    }
+    valueEl.textContent = `${fmtPct(lane.thresholdPct)}`;
+    noteEl.textContent = `${fmtRoi(lane.roiPct)} • ${lane.bets} bets`;
+  });
+}
+
 function renderGames() {
-  const filtered = allGames.filter((game) => {
+  const dateSet = [...new Set(allGames.map((game) => game.game_date).filter(Boolean))].sort();
+  const todayDate = dateSet[0] || null;
+  const tomorrowDate = dateSet[1] || null;
+  const todayCount = todayDate ? allGames.filter((game) => game.game_date === todayDate).length : 0;
+  const tomorrowCount = tomorrowDate ? allGames.filter((game) => game.game_date === tomorrowDate).length : 0;
+
+  dayChips.forEach((chip) => {
+    const label = chip.dataset.label || chip.textContent;
+    if (chip.dataset.day === "all") chip.textContent = `${label} (${allGames.length})`;
+    if (chip.dataset.day === "today") chip.textContent = `${label} (${todayCount})`;
+    if (chip.dataset.day === "tomorrow") chip.textContent = `${label} (${tomorrowCount})`;
+  });
+
+  let dayFiltered = allGames;
+  if (activeDay === "today" && todayDate) {
+    dayFiltered = allGames.filter((game) => game.game_date === todayDate);
+  } else if (activeDay === "tomorrow" && tomorrowDate) {
+    dayFiltered = allGames.filter((game) => game.game_date === tomorrowDate);
+  }
+
+  const filtered = dayFiltered.filter((game) => {
     if (activeFilter === "go_play") return Number(game.is_go_play) === 1;
     if (activeFilter === "stay_away") return Number(game.is_stay_away) === 1;
     if (activeFilter === "disagree") return game.model_vs_market === "DISAGREE";
@@ -146,6 +203,9 @@ function renderGames() {
     if (Number(game.is_stay_away) === 1) badges.appendChild(makeTag("Stay Away", "tag-red"));
     if (game.edge_tier_label) badges.appendChild(makeTag(game.edge_tier_label));
     if (game.model_vs_market === "DISAGREE") badges.appendChild(makeTag("Model vs Vegas", "tag-yellow"));
+    if (game.moneyline_roi_play) badges.appendChild(makeTag("ML 70%+", "tag-green"));
+    if (game.runline_roi_play) badges.appendChild(makeTag("RL 70%+"));
+    if (game.total_roi_play) badges.appendChild(makeTag("Total 60%+", "tag-yellow"));
 
     card.querySelector(".summary-winner").textContent = displayTeam(game.projected_winner);
     card.querySelector(".summary-confidence").textContent = fmtPct(game.projected_confidence_pct);
@@ -194,6 +254,14 @@ function bindFilters() {
       renderGames();
     });
   });
+
+  dayChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      activeDay = chip.dataset.day;
+      dayChips.forEach((other) => other.classList.toggle("is-active", other === chip));
+      renderGames();
+    });
+  });
 }
 
 async function loadBoard() {
@@ -211,6 +279,7 @@ async function loadBoard() {
     ? `Board starts ${payload.meta.refreshStartDate} and covers the next ${payload.meta.refreshDays} day(s), using the latest projections and Vegas lines.`
     : "Using the latest exported board.";
 
+  renderRoiStudy(payload.roiStudy);
   renderFeatured(payload.featured || []);
   renderGames();
 }
