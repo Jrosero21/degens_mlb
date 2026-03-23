@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Score Prediction Board</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-topline">
+          <div class="hero-brand">
+            <img class="hero-logo" src="./delly.png" alt="Delly logo" />
+            <div class="hero-copy">
+              <p class="eyebrow">Score Prediction</p>
+              <h1>Daily board</h1>
+              <p class="hero-subtitle" id="hero-subtitle">Loading projected slates...</p>
+            </div>
+          </div>
+          <span class="hero-pill" id="generated-at">Updating...</span>
+        </div>
+        <div class="hero-meta">
+          <span class="hero-pill hero-pill-accent" id="game-count">0 games</span>
+          <span class="hero-pill">Tap any matchup for the full breakdown</span>
+        </div>
+      </header>
+
+      <section class="featured-section">
+        <div class="section-heading">
+          <h2>Top Picks</h2>
+          <p>Best moneyline spots from the latest refresh.</p>
+        </div>
+        <div class="featured-layout">
+          <aside class="accuracy-placeholder">
+            <div class="accuracy-placeholder-top">
+              <p class="accuracy-placeholder-eyebrow">Accuracy Tracker</p>
+              <h3>2026 season tracking</h3>
+              <p class="accuracy-placeholder-copy">Winner, runline, and total results will populate once 2026 games are graded.</p>
+            </div>
+            <div class="accuracy-placeholder-grid">
+              <div class="accuracy-placeholder-metric">
+                <span class="accuracy-placeholder-label">Winner</span>
+                <span class="accuracy-placeholder-value">--</span>
+              </div>
+              <div class="accuracy-placeholder-metric">
+                <span class="accuracy-placeholder-label">Runline</span>
+                <span class="accuracy-placeholder-value">--</span>
+              </div>
+              <div class="accuracy-placeholder-metric">
+                <span class="accuracy-placeholder-label">O/U</span>
+                <span class="accuracy-placeholder-value">--</span>
+              </div>
+            </div>
+          </aside>
+          <div class="featured-grid" id="featured-grid"></div>
+        </div>
+      </section>
+
+      <section class="board-section">
+        <div class="section-heading">
+          <h2>All Games</h2>
+          <p>Every game in the current board, with projections and Vegas lines.</p>
+        </div>
+
+        <div class="filters">
+          <button class="filter-chip is-active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="go_play">Go Play</button>
+          <button class="filter-chip" data-filter="stay_away">Stay Away</button>
+          <button class="filter-chip" data-filter="disagree">Model vs Market</button>
+        </div>
+
+        <div class="board-list" id="board-list"></div>
+      </section>
+    </div>
+
+    <template id="featured-card-template">
+      <article class="featured-card">
+        <div class="featured-card-top">
+          <span class="tag tag-strong featured-card-type"></span>
+          <span class="featured-card-date"></span>
+        </div>
+        <h3 class="featured-card-title"></h3>
+        <p class="featured-card-subtitle"></p>
+        <p class="featured-card-body"></p>
+        <div class="featured-card-chips"></div>
+      </article>
+    </template>
+
+    <template id="game-card-template">
+      <article class="game-card">
+        <button class="game-card-head" type="button">
+          <div class="game-card-main">
+            <div class="game-heading">
+              <p class="game-date"></p>
+              <h3 class="game-matchup"></h3>
+              <div class="game-badges"></div>
+            </div>
+            <div class="expand-indicator" aria-hidden="true">+</div>
+          </div>
+          <div class="game-card-glance">
+            <div class="glance-block">
+              <span class="glance-label">Winner</span>
+              <span class="glance-value summary-winner"></span>
+            </div>
+            <div class="glance-block">
+              <span class="glance-label">Confidence</span>
+              <span class="glance-value summary-confidence"></span>
+            </div>
+            <div class="glance-block">
+              <span class="glance-label">Runline pick</span>
+              <span class="glance-value summary-runline"></span>
+            </div>
+            <div class="glance-block">
+              <span class="glance-label">Total pick</span>
+              <span class="glance-value summary-ou"></span>
+            </div>
+          </div>
+        </button>
+        <div class="game-card-body" hidden>
+          <div class="game-summary">
+            <div class="summary-chip">
+              <span class="summary-chip-label">Model edge</span>
+              <span class="summary-chip-value summary-edge"></span>
+            </div>
+            <div class="summary-chip">
+              <span class="summary-chip-label">Similar spot win rate</span>
+              <span class="summary-chip-value summary-bucket"></span>
+            </div>
+            <div class="summary-chip">
+              <span class="summary-chip-label">Model vs Vegas</span>
+              <span class="summary-chip-value summary-alignment"></span>
+            </div>
+            <div class="summary-chip">
+              <span class="summary-chip-label">Confidence tier</span>
+              <span class="summary-chip-value confidence-tier"></span>
+            </div>
+          </div>
+          <div class="game-sections">
+            <section class="game-section game-section-projected">
+              <p class="game-section-title">Model View</p>
+              <div class="game-grid">
+                <div class="metric">
+                  <span class="metric-label">Winner</span>
+                  <span class="metric-value projected-winner"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Score</span>
+                  <span class="metric-value projected-score"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Runline</span>
+                  <span class="metric-value runline-pick"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Score diff</span>
+                  <span class="metric-value projected-diff"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">O/U</span>
+                  <span class="metric-value total-pick"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Projected total</span>
+                  <span class="metric-value body-projected-total"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="game-section game-section-market">
+              <p class="game-section-title">Vegas Lines</p>
+              <div class="game-grid">
+                <div class="metric">
+                  <span class="metric-label">Favorite</span>
+                  <span class="metric-value market-favorite"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Moneyline</span>
+                  <span class="metric-value moneyline"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Runline</span>
+                  <span class="metric-value market-runline"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Market total</span>
+                  <span class="metric-value market-total"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Similar spot win rate</span>
+                  <span class="metric-value bucket-accuracy"></span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Model vs Vegas</span>
+                  <span class="metric-value body-alignment"></span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+  </html>
