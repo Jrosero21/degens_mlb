@@ -9,11 +9,14 @@ const featuredCardTemplate = document.getElementById("featured-card-template");
 const gameCardTemplate = document.getElementById("game-card-template");
 const filterChips = [...document.querySelectorAll("[data-filter]")];
 const dayChips = [...document.querySelectorAll("[data-day]")];
+const dictionaryToggle = document.getElementById("dictionary-toggle");
+const boardDictionary = document.getElementById("board-dictionary");
 
 let allGames = [];
 let activeFilter = "all";
 let activeDay = "all";
 let expandedGameId = null;
+let dictionaryOpen = false;
 
 const TEAM_DISPLAY_MAP = {
   ANA: "LAA",
@@ -227,6 +230,15 @@ function bindFilters() {
       renderGames();
     });
   });
+
+  if (dictionaryToggle && boardDictionary) {
+    dictionaryToggle.addEventListener("click", () => {
+      dictionaryOpen = !dictionaryOpen;
+      dictionaryToggle.classList.toggle("is-active", dictionaryOpen);
+      dictionaryToggle.setAttribute("aria-expanded", dictionaryOpen ? "true" : "false");
+      boardDictionary.hidden = !dictionaryOpen;
+    });
+  }
 }
 
 async function loadBoard() {

@@ -345,12 +345,57 @@ body {
   z-index: 10;
 }
 
+.filters-secondary {
+  align-items: center;
+}
+
 .filter-chip {
   background: transparent;
   border: 1px solid var(--panel-border);
   color: var(--muted);
   cursor: pointer;
   white-space: nowrap;
+}
+
+.filter-chip-dictionary {
+  margin-left: auto;
+}
+
+.board-dictionary {
+  margin: -2px 0 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+}
+
+.board-dictionary-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.board-dictionary-item {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(12, 15, 24, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.board-dictionary-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.board-dictionary-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .board-list {
@@ -688,6 +733,10 @@ body {
   .hero-side {
     position: static;
     width: auto;
+  }
+
+  .filter-chip-dictionary {
+    margin-left: 0;
   }
 
   .game-summary {

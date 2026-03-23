@@ -89,6 +89,32 @@
           <button class="filter-chip" data-filter="go_play">Go Play</button>
           <button class="filter-chip" data-filter="stay_away">Stay Away</button>
           <button class="filter-chip" data-filter="disagree">Model vs Market</button>
+          <button class="filter-chip filter-chip-dictionary" id="dictionary-toggle" type="button" aria-expanded="false">Dictionary</button>
+        </div>
+
+        <div class="board-dictionary" id="board-dictionary" hidden>
+          <div class="board-dictionary-grid">
+            <div class="board-dictionary-item">
+              <span class="board-dictionary-label">Go Play</span>
+              <p>Best current setups on the board. These are the strongest combinations of edge, confidence, and price alignment.</p>
+            </div>
+            <div class="board-dictionary-item">
+              <span class="board-dictionary-label">Playable</span>
+              <p>Solid edge, but not top-tier. Worth considering if the price still matches the board.</p>
+            </div>
+            <div class="board-dictionary-item">
+              <span class="board-dictionary-label">Stay Away</span>
+              <p>Too close, too noisy, or not enough separation versus Vegas to justify a play.</p>
+            </div>
+            <div class="board-dictionary-item">
+              <span class="board-dictionary-label">Model vs Vegas</span>
+              <p>The model disagrees with the market favorite or total side, which can signal value but also extra volatility.</p>
+            </div>
+            <div class="board-dictionary-item">
+              <span class="board-dictionary-label">Sweet-Spot Badges</span>
+              <p>`ML 70%+`, `RL 70%+`, and `Total 60%+` mark confidence levels that produced the best historical ROI in 2025 testing.</p>
+            </div>
+          </div>
         </div>
 
         <div class="board-list" id="board-list"></div>
