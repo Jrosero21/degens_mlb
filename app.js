@@ -5,6 +5,14 @@ const boardList = document.getElementById("board-list");
 const generatedAtEl = document.getElementById("generated-at");
 const gameCountEl = document.getElementById("game-count");
 const heroSubtitleEl = document.getElementById("hero-subtitle");
+const accuracyTitleEl = document.getElementById("accuracy-title");
+const accuracyCopyEl = document.getElementById("accuracy-copy");
+const accuracyMoneylineValueEl = document.getElementById("accuracy-moneyline-value");
+const accuracyMoneylineNoteEl = document.getElementById("accuracy-moneyline-note");
+const accuracyRunlineValueEl = document.getElementById("accuracy-runline-value");
+const accuracyRunlineNoteEl = document.getElementById("accuracy-runline-note");
+const accuracyTotalValueEl = document.getElementById("accuracy-total-value");
+const accuracyTotalNoteEl = document.getElementById("accuracy-total-note");
 const featuredCardTemplate = document.getElementById("featured-card-template");
 const gameCardTemplate = document.getElementById("game-card-template");
 const filterChips = [...document.querySelectorAll("[data-filter]")];
@@ -98,7 +106,7 @@ function renderFeatured(featured) {
   for (const item of featured) {
     const card = featuredCardTemplate.content.firstElementChild.cloneNode(true);
     card.querySelector(".featured-card-type").textContent = (item.card_type || "Pick").replaceAll("_", " ");
-    card.querySelector(".featured-card-date").textContent = fmtDate(item.game_date);
+    card.querySelector(".featured-card-date").textContent = fmtDate(item.board_display_date || item.game_date);
     card.querySelector(".featured-card-title").textContent = displayText(item.card_title || item.matchup_display);
     card.querySelector(".featured-card-subtitle").textContent = displayText(item.card_subtitle || item.matchup_display);
     card.querySelector(".featured-card-body").textContent = displayText(item.body_text || "No supporting note yet.");
@@ -113,11 +121,13 @@ function renderFeatured(featured) {
 }
 
 function renderGames() {
-  const dateSet = [...new Set(allGames.map((game) => game.game_date).filter(Boolean))].sort();
-  const todayDate = dateSet[0] || null;
-  const tomorrowDate = dateSet[1] || null;
-  const todayCount = todayDate ? allGames.filter((game) => game.game_date === todayDate).length : 0;
-  const tomorrowCount = tomorrowDate ? allGames.filter((game) => game.game_date === tomorrowDate).length : 0;
+  const dateSet = [...new Set(allGames.map((game) => game.board_display_date || game.game_date).filter(Boolean))].sort();
+  const boardDate = window.__boardMeta?.boardDate || dateSet[0] || null;
+  const plusOne = boardDate ? new Date(`${boardDate}T12:00:00`) : null;
+  if (plusOne) plusOne.setDate(plusOne.getDate() + 1);
+  const resolvedTomorrowDate = plusOne ? plusOne.toISOString().slice(0, 10) : null;
+  const todayCount = boardDate ? allGames.filter((game) => (game.board_display_date || game.game_date) === boardDate).length : 0;
+  const tomorrowCount = resolvedTomorrowDate ? allGames.filter((game) => (game.board_display_date || game.game_date) === resolvedTomorrowDate).length : 0;
 
   dayChips.forEach((chip) => {
     const label = chip.dataset.label || chip.textContent;
@@ -127,10 +137,10 @@ function renderGames() {
   });
 
   let dayFiltered = allGames;
-  if (activeDay === "today" && todayDate) {
-    dayFiltered = allGames.filter((game) => game.game_date === todayDate);
-  } else if (activeDay === "tomorrow" && tomorrowDate) {
-    dayFiltered = allGames.filter((game) => game.game_date === tomorrowDate);
+  if (activeDay === "today" && boardDate) {
+    dayFiltered = allGames.filter((game) => (game.board_display_date || game.game_date) === boardDate);
+  } else if (activeDay === "tomorrow" && resolvedTomorrowDate) {
+    dayFiltered = allGames.filter((game) => (game.board_display_date || game.game_date) === resolvedTomorrowDate);
   }
 
   const filtered = dayFiltered.filter((game) => {
@@ -163,7 +173,7 @@ function renderGames() {
     }
     head.setAttribute("aria-expanded", expandedGameId === game.gamePk ? "true" : "false");
 
-    card.querySelector(".game-date").textContent = fmtDate(game.game_date);
+    card.querySelector(".game-date").textContent = fmtDate(game.board_display_date || game.game_date);
     card.querySelector(".game-matchup").textContent = `${displayTeam(game.away_team)} at ${displayTeam(game.home_team)}`;
 
     const badges = card.querySelector(".game-badges");
@@ -241,11 +251,40 @@ function bindFilters() {
   }
 }
 
+function renderAccuracy(accuracy) {
+  if (!accuracy) return;
+
+  accuracyTitleEl.textContent = accuracy.season || "Season tracking";
+
+  const moneyline = accuracy.lanes?.moneyline;
+  const runline = accuracy.lanes?.runline;
+  const total = accuracy.lanes?.total;
+
+  const formatLane = (lane, valueEl, noteEl) => {
+    if (!lane || lane.accuracyPct == null) {
+      valueEl.textContent = "--";
+      noteEl.textContent = "Waiting on graded games";
+      return;
+    }
+    valueEl.textContent = fmtPct(lane.accuracyPct);
+    noteEl.textContent = `${lane.correct}/${lane.gradedGames} correct`;
+  };
+
+  formatLane(moneyline, accuracyMoneylineValueEl, accuracyMoneylineNoteEl);
+  formatLane(runline, accuracyRunlineValueEl, accuracyRunlineNoteEl);
+  formatLane(total, accuracyTotalValueEl, accuracyTotalNoteEl);
+
+  if (accuracy.gradedGames > 0) {
+    accuracyCopyEl.textContent = `${accuracy.gradedGames} settled game${accuracy.gradedGames === 1 ? "" : "s"} graded so far.`;
+  }
+}
+
 async function loadBoard() {
   const response = await fetch(`${DATA_URL}?ts=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`Failed to load board: ${response.status}`);
 
   const payload = await response.json();
+  window.__boardMeta = payload.meta || {};
   allGames = payload.games || [];
 
   generatedAtEl.textContent = payload.meta?.generatedAt
@@ -254,8 +293,9 @@ async function loadBoard() {
   gameCountEl.textContent = `${payload.meta?.gameCount ?? allGames.length} games`;
   heroSubtitleEl.textContent = payload.meta?.refreshStartDate
     ? `Board starts ${payload.meta.refreshStartDate} and covers the next ${payload.meta.refreshDays} day(s), using the latest projections and Vegas lines.`
-    : "Using the latest exported board.";
+    : `Using the latest exported board for ${payload.meta?.boardTimezone || "the current board timezone"}.`;
 
+  renderAccuracy(payload.accuracy);
   renderFeatured(payload.featured || []);
   renderGames();
 }
