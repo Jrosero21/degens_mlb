@@ -62,6 +62,9 @@ const fmtSigned = (value, digits = 3) => {
   return `${num > 0 ? "+" : ""}${num.toFixed(digits)}`;
 };
 
+const fmtLine = (value, digits = 1) =>
+  value == null ? "—" : Number(value).toFixed(digits);
+
 const fmtDate = (value) => {
   if (!value) return "Unknown date";
   return new Date(`${value}T12:00:00`).toLocaleDateString("en-US", {
@@ -93,6 +96,14 @@ function makeTag(label, className = "") {
   span.className = `tag ${className}`.trim();
   span.textContent = label;
   return span;
+}
+
+function formatTotalSide(game) {
+  const pick = game.projected_ou_pick ? displayText(game.projected_ou_pick) : "—";
+  if (!game.projected_ou_pick || game.vegas_total_line == null) {
+    return pick;
+  }
+  return `${pick} ${fmtLine(game.vegas_total_line, 1)}`;
 }
 
 function renderFeatured(featured) {
@@ -154,7 +165,7 @@ function buildGameCard(game) {
   card.querySelector(".summary-edge").textContent = `${fmtSigned(game.projected_score_diff)} diff • ${fmtSigned(game.projected_total_edge)} total`;
   card.querySelector(".summary-bucket").textContent = `${fmtPct(game.historical_bucket_accuracy_pct)} • ${game.historical_bucket_games ?? "—"} games`;
   card.querySelector(".summary-runline").textContent = `${displayText(game.projected_runline_pick || "—")}${game.projected_runline_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_runline_confidence_pct)}`}`;
-  card.querySelector(".summary-ou").textContent = `${displayText(game.projected_ou_pick || "—")}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}`;
+  card.querySelector(".summary-ou").textContent = `${formatTotalSide(game)}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}`;
   card.querySelector(".projected-winner").textContent = displayTeam(game.projected_winner);
   card.querySelector(".projected-score").textContent = `${fmtNumber(game.projected_away_runs, 1)} - ${fmtNumber(game.projected_home_runs, 1)}`;
   card.querySelector(".projected-diff").textContent = fmtNumber(game.projected_score_diff, 3);
@@ -174,7 +185,7 @@ function buildGameCard(game) {
 
   const totalPickEl = card.querySelector(".total-pick");
   const totalEdge = Number(game.projected_total_edge ?? 0);
-  totalPickEl.textContent = `${game.projected_ou_pick || "—"}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}${game.projected_total_edge == null ? "" : ` • ${fmtSigned(game.projected_total_edge)}`}`;
+  totalPickEl.textContent = `${formatTotalSide(game)}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}${game.projected_total_edge == null ? "" : ` • ${fmtSigned(game.projected_total_edge)}`}`;
   if (totalEdge > 0) totalPickEl.style.color = "var(--green)";
   if (totalEdge < 0) totalPickEl.style.color = "var(--red)";
 
