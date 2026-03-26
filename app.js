@@ -2,6 +2,8 @@ const DATA_URL = "./data/current-board.json";
 
 const featuredGrid = document.getElementById("featured-grid");
 const boardList = document.getElementById("board-list");
+const recentResultsSection = document.getElementById("recent-results-section");
+const recentResultsList = document.getElementById("recent-results-list");
 const generatedAtEl = document.getElementById("generated-at");
 const gameCountEl = document.getElementById("game-count");
 const heroSubtitleEl = document.getElementById("hero-subtitle");
@@ -21,8 +23,9 @@ const dictionaryToggle = document.getElementById("dictionary-toggle");
 const boardDictionary = document.getElementById("board-dictionary");
 
 let allGames = [];
+let recentGames = [];
 let activeFilter = "all";
-let activeDay = "all";
+let activeDay = "today";
 let expandedGameId = null;
 let dictionaryOpen = false;
 
@@ -120,6 +123,86 @@ function renderFeatured(featured) {
   }
 }
 
+function buildGameCard(game) {
+  const card = gameCardTemplate.content.firstElementChild.cloneNode(true);
+  const head = card.querySelector(".game-card-head");
+  const body = card.querySelector(".game-card-body");
+  if (game.model_vs_market === "DISAGREE") {
+    card.classList.add("is-disagree");
+  }
+  if (expandedGameId === game.gamePk) {
+    card.classList.add("is-open");
+    body.hidden = false;
+  }
+  head.setAttribute("aria-expanded", expandedGameId === game.gamePk ? "true" : "false");
+
+  card.querySelector(".game-date").textContent = fmtDate(game.board_display_date || game.game_date);
+  card.querySelector(".game-matchup").textContent = `${displayTeam(game.away_team)} at ${displayTeam(game.home_team)}`;
+
+  const badges = card.querySelector(".game-badges");
+  if (Number(game.is_go_play) === 1) badges.appendChild(makeTag("Go Play", "tag-green"));
+  if (Number(game.is_stay_away) === 1) badges.appendChild(makeTag("Stay Away", "tag-red"));
+  if (game.edge_tier_label) badges.appendChild(makeTag(game.edge_tier_label));
+  if (game.model_vs_market === "DISAGREE") badges.appendChild(makeTag("Model vs Vegas", "tag-yellow"));
+  if (game.moneyline_roi_play) badges.appendChild(makeTag("ML 70%+", "tag-green"));
+  if (game.runline_roi_play) badges.appendChild(makeTag("RL 70%+"));
+  if (game.total_roi_play) badges.appendChild(makeTag("Total 60%+", "tag-yellow"));
+
+  card.querySelector(".summary-winner").textContent = displayTeam(game.projected_winner);
+  card.querySelector(".summary-confidence").textContent = fmtPct(game.projected_confidence_pct);
+  card.querySelector(".summary-alignment").textContent = game.model_vs_market || "—";
+  card.querySelector(".summary-edge").textContent = `${fmtSigned(game.projected_score_diff)} diff • ${fmtSigned(game.projected_total_edge)} total`;
+  card.querySelector(".summary-bucket").textContent = `${fmtPct(game.historical_bucket_accuracy_pct)} • ${game.historical_bucket_games ?? "—"} games`;
+  card.querySelector(".summary-runline").textContent = `${displayText(game.projected_runline_pick || "—")}${game.projected_runline_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_runline_confidence_pct)}`}`;
+  card.querySelector(".summary-ou").textContent = `${displayText(game.projected_ou_pick || "—")}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}`;
+  card.querySelector(".projected-winner").textContent = displayTeam(game.projected_winner);
+  card.querySelector(".projected-score").textContent = `${fmtNumber(game.projected_away_runs, 1)} - ${fmtNumber(game.projected_home_runs, 1)}`;
+  card.querySelector(".projected-diff").textContent = fmtNumber(game.projected_score_diff, 3);
+  card.querySelector(".confidence-tier").textContent = game.edge_tier_label || "—";
+  card.querySelector(".bucket-accuracy").textContent = `${fmtPct(game.historical_bucket_accuracy_pct)} • ${game.historical_bucket_games ?? "—"} games`;
+  card.querySelector(".body-alignment").textContent = game.model_vs_market || "—";
+  card.querySelector(".market-favorite").textContent = displayTeam(game.market_favorite);
+  card.querySelector(".moneyline").textContent = `${displayTeam(game.away_team)} ${fmtMl(game.vegas_moneyline_away)} / ${displayTeam(game.home_team)} ${fmtMl(game.vegas_moneyline_home)}`;
+  card.querySelector(".market-runline").textContent = displayText(game.market_runline || "—");
+  const runlinePickEl = card.querySelector(".runline-pick");
+  const runlineEdge = Number(game.projected_runline_edge ?? 0);
+  runlinePickEl.textContent = `${displayText(game.projected_runline_pick || "—")}${game.projected_runline_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_runline_confidence_pct)}`}${game.projected_runline_edge == null ? "" : ` • ${fmtSigned(game.projected_runline_edge)}`}`;
+  if (runlineEdge > 0) runlinePickEl.style.color = "var(--green)";
+  if (runlineEdge < 0) runlinePickEl.style.color = "var(--red)";
+  card.querySelector(".body-projected-total").textContent = fmtNumber(game.projected_total_runs, 3);
+  card.querySelector(".market-total").textContent = fmtNumber(game.vegas_total_line, 3);
+
+  const totalPickEl = card.querySelector(".total-pick");
+  const totalEdge = Number(game.projected_total_edge ?? 0);
+  totalPickEl.textContent = `${game.projected_ou_pick || "—"}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}${game.projected_total_edge == null ? "" : ` • ${fmtSigned(game.projected_total_edge)}`}`;
+  if (totalEdge > 0) totalPickEl.style.color = "var(--green)";
+  if (totalEdge < 0) totalPickEl.style.color = "var(--red)";
+
+  head.addEventListener("click", () => {
+    expandedGameId = expandedGameId === game.gamePk ? null : game.gamePk;
+    renderGames();
+    renderRecentGames();
+  });
+
+  return card;
+}
+
+function renderGameCards(targetEl, games, emptyText) {
+  targetEl.innerHTML = "";
+
+  if (!games.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.textContent = emptyText;
+    targetEl.appendChild(empty);
+    return;
+  }
+
+  for (const game of games) {
+    targetEl.appendChild(buildGameCard(game));
+  }
+}
+
 function renderGames() {
   const dateSet = [...new Set(allGames.map((game) => game.board_display_date || game.game_date).filter(Boolean))].sort();
   const boardDate = window.__boardMeta?.boardDate || dateSet[0] || null;
@@ -129,9 +212,14 @@ function renderGames() {
   const todayCount = boardDate ? allGames.filter((game) => (game.board_display_date || game.game_date) === boardDate).length : 0;
   const tomorrowCount = resolvedTomorrowDate ? allGames.filter((game) => (game.board_display_date || game.game_date) === resolvedTomorrowDate).length : 0;
 
+  if (activeDay === "today" && todayCount === 0 && tomorrowCount > 0) {
+    activeDay = "tomorrow";
+  } else if (activeDay === "tomorrow" && tomorrowCount === 0 && todayCount > 0) {
+    activeDay = "today";
+  }
+
   dayChips.forEach((chip) => {
     const label = chip.dataset.label || chip.textContent;
-    if (chip.dataset.day === "all") chip.textContent = `${label} (${allGames.length})`;
     if (chip.dataset.day === "today") chip.textContent = `${label} (${todayCount})`;
     if (chip.dataset.day === "tomorrow") chip.textContent = `${label} (${tomorrowCount})`;
   });
@@ -150,78 +238,20 @@ function renderGames() {
     return true;
   });
 
-  boardList.innerHTML = "";
+  renderGameCards(boardList, filtered, "No games match this filter.");
+}
 
-  if (!filtered.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty-state";
-    empty.textContent = "No games match this filter.";
-    boardList.appendChild(empty);
+function renderRecentGames() {
+  if (!recentResultsSection || !recentResultsList) return;
+
+  const hasRecentGames = recentGames.length > 0;
+  recentResultsSection.hidden = !hasRecentGames;
+  if (!hasRecentGames) {
+    recentResultsList.innerHTML = "";
     return;
   }
 
-  for (const game of filtered) {
-    const card = gameCardTemplate.content.firstElementChild.cloneNode(true);
-    const head = card.querySelector(".game-card-head");
-    const body = card.querySelector(".game-card-body");
-    if (game.model_vs_market === "DISAGREE") {
-      card.classList.add("is-disagree");
-    }
-    if (expandedGameId === game.gamePk) {
-      card.classList.add("is-open");
-      body.hidden = false;
-    }
-    head.setAttribute("aria-expanded", expandedGameId === game.gamePk ? "true" : "false");
-
-    card.querySelector(".game-date").textContent = fmtDate(game.board_display_date || game.game_date);
-    card.querySelector(".game-matchup").textContent = `${displayTeam(game.away_team)} at ${displayTeam(game.home_team)}`;
-
-    const badges = card.querySelector(".game-badges");
-    if (Number(game.is_go_play) === 1) badges.appendChild(makeTag("Go Play", "tag-green"));
-    if (Number(game.is_stay_away) === 1) badges.appendChild(makeTag("Stay Away", "tag-red"));
-    if (game.edge_tier_label) badges.appendChild(makeTag(game.edge_tier_label));
-    if (game.model_vs_market === "DISAGREE") badges.appendChild(makeTag("Model vs Vegas", "tag-yellow"));
-    if (game.moneyline_roi_play) badges.appendChild(makeTag("ML 70%+", "tag-green"));
-    if (game.runline_roi_play) badges.appendChild(makeTag("RL 70%+"));
-    if (game.total_roi_play) badges.appendChild(makeTag("Total 60%+", "tag-yellow"));
-
-    card.querySelector(".summary-winner").textContent = displayTeam(game.projected_winner);
-    card.querySelector(".summary-confidence").textContent = fmtPct(game.projected_confidence_pct);
-    card.querySelector(".summary-alignment").textContent = game.model_vs_market || "—";
-    card.querySelector(".summary-edge").textContent = `${fmtSigned(game.projected_score_diff)} diff • ${fmtSigned(game.projected_total_edge)} total`;
-    card.querySelector(".summary-bucket").textContent = `${fmtPct(game.historical_bucket_accuracy_pct)} • ${game.historical_bucket_games ?? "—"} games`;
-    card.querySelector(".summary-runline").textContent = `${displayText(game.projected_runline_pick || "—")}${game.projected_runline_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_runline_confidence_pct)}`}`;
-    card.querySelector(".summary-ou").textContent = `${displayText(game.projected_ou_pick || "—")}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}`;
-    card.querySelector(".projected-winner").textContent = displayTeam(game.projected_winner);
-    card.querySelector(".projected-score").textContent = `${fmtNumber(game.projected_away_runs, 1)} - ${fmtNumber(game.projected_home_runs, 1)}`;
-    card.querySelector(".projected-diff").textContent = fmtNumber(game.projected_score_diff, 3);
-    card.querySelector(".confidence-tier").textContent = game.edge_tier_label || "—";
-    card.querySelector(".bucket-accuracy").textContent = `${fmtPct(game.historical_bucket_accuracy_pct)} • ${game.historical_bucket_games ?? "—"} games`;
-    card.querySelector(".body-alignment").textContent = game.model_vs_market || "—";
-    card.querySelector(".market-favorite").textContent = displayTeam(game.market_favorite);
-    card.querySelector(".moneyline").textContent = `${displayTeam(game.away_team)} ${fmtMl(game.vegas_moneyline_away)} / ${displayTeam(game.home_team)} ${fmtMl(game.vegas_moneyline_home)}`;
-    card.querySelector(".market-runline").textContent = displayText(game.market_runline || "—");
-    const runlinePickEl = card.querySelector(".runline-pick");
-    const runlineEdge = Number(game.projected_runline_edge ?? 0);
-    runlinePickEl.textContent = `${displayText(game.projected_runline_pick || "—")}${game.projected_runline_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_runline_confidence_pct)}`}${game.projected_runline_edge == null ? "" : ` • ${fmtSigned(game.projected_runline_edge)}`}`;
-    if (runlineEdge > 0) runlinePickEl.style.color = "var(--green)";
-    if (runlineEdge < 0) runlinePickEl.style.color = "var(--red)";
-    card.querySelector(".body-projected-total").textContent = fmtNumber(game.projected_total_runs, 3);
-    card.querySelector(".market-total").textContent = fmtNumber(game.vegas_total_line, 3);
-
-    const totalPickEl = card.querySelector(".total-pick");
-    const totalEdge = Number(game.projected_total_edge ?? 0);
-    totalPickEl.textContent = `${game.projected_ou_pick || "—"}${game.projected_ou_confidence_pct == null ? "" : ` • ${fmtPct(game.projected_ou_confidence_pct)}`}${game.projected_total_edge == null ? "" : ` • ${fmtSigned(game.projected_total_edge)}`}`;
-    if (totalEdge > 0) totalPickEl.style.color = "var(--green)";
-    if (totalEdge < 0) totalPickEl.style.color = "var(--red)";
-
-    head.addEventListener("click", () => {
-      expandedGameId = expandedGameId === game.gamePk ? null : game.gamePk;
-      renderGames();
-    });
-
-    boardList.appendChild(card);
-  }
+  renderGameCards(recentResultsList, recentGames, "No recent games to show.");
 }
 
 function bindFilters() {
@@ -286,18 +316,20 @@ async function loadBoard() {
   const payload = await response.json();
   window.__boardMeta = payload.meta || {};
   allGames = payload.games || [];
+  recentGames = payload.recentGames || [];
 
   generatedAtEl.textContent = payload.meta?.generatedAt
     ? `Updated ${new Date(payload.meta.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}`
     : "Updated just now";
   gameCountEl.textContent = `${payload.meta?.gameCount ?? allGames.length} games`;
   heroSubtitleEl.textContent = payload.meta?.refreshStartDate
-    ? `Board starts ${payload.meta.refreshStartDate} and covers the next ${payload.meta.refreshDays} day(s), using the latest projections and Vegas lines.`
+    ? `Showing the live board for ${payload.meta.boardDate} plus tomorrow when available. Prior dates move into Recent Results.`
     : `Using the latest exported board for ${payload.meta?.boardTimezone || "the current board timezone"}.`;
 
   renderAccuracy(payload.accuracy);
   renderFeatured(payload.featured || []);
   renderGames();
+  renderRecentGames();
 }
 
 bindFilters();
@@ -305,4 +337,7 @@ loadBoard().catch((error) => {
   console.error(error);
   featuredGrid.innerHTML = '<div class="empty-state">Failed to load featured picks.</div>';
   boardList.innerHTML = '<div class="empty-state">Failed to load the game board.</div>';
+  if (recentResultsList) {
+    recentResultsList.innerHTML = '<div class="empty-state">Failed to load recent results.</div>';
+  }
 });
