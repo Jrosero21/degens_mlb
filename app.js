@@ -301,19 +301,28 @@ function renderAccuracy(accuracy) {
   const runline = accuracy.lanes?.runline;
   const total = accuracy.lanes?.total;
 
-  const formatLane = (lane, valueEl, noteEl) => {
+  const formatLane = (lane, valueEl, noteEl, options = {}) => {
     if (!lane || lane.accuracyPct == null) {
       valueEl.textContent = "--";
       noteEl.textContent = "Waiting on graded games";
       return;
     }
     valueEl.textContent = fmtPct(lane.accuracyPct);
+
+    const pushes = Number(lane.pushes ?? 0);
+    const settledGames = Number(accuracy.gradedGames ?? lane.gradedGames ?? 0);
+    if (options.includePushes && pushes > 0) {
+      const trackedGames = Number(lane.gradedGames ?? 0) + pushes;
+      noteEl.textContent = `${trackedGames}/${settledGames || trackedGames} tracked • ${pushes} push${pushes === 1 ? "" : "es"}`;
+      return;
+    }
+
     noteEl.textContent = `${lane.correct}/${lane.gradedGames} correct`;
   };
 
   formatLane(moneyline, accuracyMoneylineValueEl, accuracyMoneylineNoteEl);
   formatLane(runline, accuracyRunlineValueEl, accuracyRunlineNoteEl);
-  formatLane(total, accuracyTotalValueEl, accuracyTotalNoteEl);
+  formatLane(total, accuracyTotalValueEl, accuracyTotalNoteEl, { includePushes: true });
 
   if (accuracy.gradedGames > 0) {
     accuracyCopyEl.textContent = `${accuracy.gradedGames} settled game${accuracy.gradedGames === 1 ? "" : "s"} graded so far.`;
