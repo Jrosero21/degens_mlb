@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-03-26T01:47:13.257010+00:00",
+    "generatedAt": "2026-03-26T01:53:27.553435+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-03-25",
     "refreshDays": 2,
@@ -122,11 +122,11 @@
       "featured_card_subtitle": "NYA at SFN",
       "featured_body_text": "Strongest aligned side on the board today. Model and market are pointing the same way.",
       "featured_chip_1": "Best available edge \u2022 +0.5 runs",
-      "featured_chip_2": "Confidence 58.0%",
-      "featured_confidence_score_pct": 58.0,
+      "featured_chip_2": "Confidence 58.1%",
+      "featured_confidence_score_pct": 58.1,
       "model_version": "blend_runs_v1_50_50_nb_gbr",
       "projection_stage": "early",
-      "market_runline": null,
+      "market_runline": "NYA -1.5 / SFN +1.5",
       "projected_runline_edge": null,
       "moneyline_roi_play": false,
       "runline_roi_play": false,
