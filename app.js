@@ -312,8 +312,8 @@ function renderAccuracy(accuracy) {
     const pushes = Number(lane.pushes ?? 0);
     const settledGames = Number(accuracy.gradedGames ?? lane.gradedGames ?? 0);
     if (options.includePushes && pushes > 0) {
-      const trackedGames = Number(lane.gradedGames ?? 0) + pushes;
-      noteEl.textContent = `${trackedGames}/${settledGames || trackedGames} tracked • ${pushes} push${pushes === 1 ? "" : "es"}`;
+      const gradedGames = Number(lane.gradedGames ?? 0);
+      noteEl.textContent = `${lane.correct}/${gradedGames} correct • ${pushes} push${pushes === 1 ? "" : "es"}`;
       return;
     }
 
