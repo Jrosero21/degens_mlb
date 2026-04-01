@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-01T07:02:52.442252+00:00",
+    "generatedAt": "2026-04-01T17:03:04.509199+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-01",
     "refreshDays": 2,
@@ -152,8 +152,8 @@
   ],
   "games": [
     {
-      "game_date": "2026-04-01",
       "gamePk": 822835,
+      "game_date": "2026-04-01",
       "away_team": "COL",
       "home_team": "TOR",
       "commence_time_utc": "2026-04-01T17:07:00+00:00",
@@ -210,8 +210,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823483,
+      "game_date": "2026-04-01",
       "away_team": "WAS",
       "home_team": "PHI",
       "commence_time_utc": "2026-04-01T17:05:00+00:00",
@@ -268,8 +268,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823078,
+      "game_date": "2026-04-01",
       "away_team": "NYN",
       "home_team": "SLN",
       "commence_time_utc": "2026-04-01T17:15:00+00:00",
@@ -326,8 +326,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 825106,
+      "game_date": "2026-04-01",
       "away_team": "DET",
       "home_team": "AZ",
       "commence_time_utc": "2026-04-01T19:41:00+00:00",
@@ -384,8 +384,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824698,
+      "game_date": "2026-04-01",
       "away_team": "ANA",
       "home_team": "CHN",
       "commence_time_utc": "2026-04-01T18:20:00+00:00",
@@ -442,8 +442,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823806,
+      "game_date": "2026-04-01",
       "away_team": "TBA",
       "home_team": "MIL",
       "commence_time_utc": "2026-04-01T17:40:00+00:00",
@@ -500,8 +500,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824211,
+      "game_date": "2026-04-01",
       "away_team": "BOS",
       "home_team": "HOU",
       "commence_time_utc": "2026-04-01T18:10:00+00:00",
@@ -558,8 +558,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823321,
+      "game_date": "2026-04-01",
       "away_team": "SFN",
       "home_team": "SDN",
       "commence_time_utc": "2026-04-01T20:10:00+00:00",
@@ -616,8 +616,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823157,
+      "game_date": "2026-04-01",
       "away_team": "NYA",
       "home_team": "SEA",
       "commence_time_utc": "2026-04-01T20:10:00+00:00",
@@ -674,8 +674,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824536,
+      "game_date": "2026-04-01",
       "away_team": "PIT",
       "home_team": "CIN",
       "commence_time_utc": "2026-04-01T16:40:00+00:00",
@@ -732,8 +732,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824940,
+      "game_date": "2026-04-01",
       "away_team": "ATH",
       "home_team": "ATL",
       "commence_time_utc": "2026-04-01T16:15:00+00:00",
@@ -790,8 +790,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823889,
+      "game_date": "2026-04-01",
       "away_team": "CHA",
       "home_team": "MIA",
       "commence_time_utc": "2026-04-01T17:10:00+00:00",
@@ -848,8 +848,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 823970,
+      "game_date": "2026-04-01",
       "away_team": "CLE",
       "home_team": "LAN",
       "commence_time_utc": "2026-04-02T00:20:00+00:00",
@@ -906,8 +906,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824860,
+      "game_date": "2026-04-01",
       "away_team": "TEX",
       "home_team": "BAL",
       "commence_time_utc": "2026-04-01T16:36:00+00:00",
@@ -964,8 +964,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-01",
       "gamePk": 824136,
+      "game_date": "2026-04-01",
       "away_team": "MIN",
       "home_team": "KCA",
       "commence_time_utc": "2026-04-01T23:40:00+00:00",
@@ -1022,8 +1022,8 @@
       "total_roi_play": true
     },
     {
-      "game_date": "2026-04-02",
       "gamePk": 823242,
+      "game_date": "2026-04-02",
       "away_team": "NYN",
       "home_team": "SFN",
       "commence_time_utc": null,
@@ -1080,8 +1080,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-02",
       "gamePk": 825105,
+      "game_date": "2026-04-02",
       "away_team": "ATL",
       "home_team": "AZ",
       "commence_time_utc": null,
@@ -1138,8 +1138,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-02",
       "gamePk": 824621,
+      "game_date": "2026-04-02",
       "away_team": "TOR",
       "home_team": "CHA",
       "commence_time_utc": null,
@@ -1196,8 +1196,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-04-02",
       "gamePk": 824133,
+      "game_date": "2026-04-02",
       "away_team": "MIN",
       "home_team": "KCA",
       "commence_time_utc": null,
@@ -1256,8 +1256,8 @@
   ],
   "recentGames": [
     {
-      "game_date": "2026-03-31",
       "gamePk": 822836,
+      "game_date": "2026-03-31",
       "away_team": "COL",
       "home_team": "TOR",
       "commence_time_utc": null,
@@ -1314,8 +1314,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823077,
+      "game_date": "2026-03-31",
       "away_team": "NYN",
       "home_team": "SLN",
       "commence_time_utc": null,
@@ -1372,8 +1372,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823485,
+      "game_date": "2026-03-31",
       "away_team": "WAS",
       "home_team": "PHI",
       "commence_time_utc": null,
@@ -1430,8 +1430,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 825107,
+      "game_date": "2026-03-31",
       "away_team": "DET",
       "home_team": "AZ",
       "commence_time_utc": null,
@@ -1488,8 +1488,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 824699,
+      "game_date": "2026-03-31",
       "away_team": "ANA",
       "home_team": "CHN",
       "commence_time_utc": null,
@@ -1546,8 +1546,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 824212,
+      "game_date": "2026-03-31",
       "away_team": "BOS",
       "home_team": "HOU",
       "commence_time_utc": null,
@@ -1604,8 +1604,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823807,
+      "game_date": "2026-03-31",
       "away_team": "TBA",
       "home_team": "MIL",
       "commence_time_utc": null,
@@ -1662,8 +1662,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823322,
+      "game_date": "2026-03-31",
       "away_team": "SFN",
       "home_team": "SDN",
       "commence_time_utc": null,
@@ -1720,8 +1720,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823158,
+      "game_date": "2026-03-31",
       "away_team": "NYA",
       "home_team": "SEA",
       "commence_time_utc": null,
@@ -1778,8 +1778,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 824942,
+      "game_date": "2026-03-31",
       "away_team": "ATH",
       "home_team": "ATL",
       "commence_time_utc": null,
@@ -1836,8 +1836,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 824537,
+      "game_date": "2026-03-31",
       "away_team": "PIT",
       "home_team": "CIN",
       "commence_time_utc": null,
@@ -1894,8 +1894,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823888,
+      "game_date": "2026-03-31",
       "away_team": "CHA",
       "home_team": "MIA",
       "commence_time_utc": null,
@@ -1952,8 +1952,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 823969,
+      "game_date": "2026-03-31",
       "away_team": "CLE",
       "home_team": "LAN",
       "commence_time_utc": null,
@@ -2010,8 +2010,8 @@
       "total_roi_play": false
     },
     {
-      "game_date": "2026-03-31",
       "gamePk": 824861,
+      "game_date": "2026-03-31",
       "away_team": "TEX",
       "home_team": "BAL",
       "commence_time_utc": null,
