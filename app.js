@@ -325,7 +325,14 @@ function renderAccuracy(accuracy) {
   formatLane(total, accuracyTotalValueEl, accuracyTotalNoteEl, { includePushes: true });
 
   if (accuracy.gradedGames > 0) {
-    accuracyCopyEl.textContent = `${accuracy.gradedGames} settled game${accuracy.gradedGames === 1 ? "" : "s"} graded so far.`;
+    const moneylineGames = Number(moneyline?.gradedGames ?? 0);
+    const runlineGames = Number(runline?.gradedGames ?? 0);
+    const totalGames = Number(total?.gradedGames ?? 0);
+    if (moneylineGames === runlineGames && runlineGames === totalGames) {
+      accuracyCopyEl.textContent = `${accuracy.gradedGames} settled game${accuracy.gradedGames === 1 ? "" : "s"} graded so far.`;
+    } else {
+      accuracyCopyEl.textContent = `${moneylineGames} moneyline, ${runlineGames} runline, ${totalGames} total decisions graded so far.`;
+    }
   }
 }
 
