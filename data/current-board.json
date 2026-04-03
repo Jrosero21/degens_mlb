@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-03T20:57:50.452814+00:00",
+    "generatedAt": "2026-04-03T21:12:59.379918+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-03",
     "refreshDays": 2,
@@ -28,17 +28,17 @@
   "accuracy": {
     "season": "2026 season",
     "modelLabel": "live board grading",
-    "gradedGames": 98,
+    "gradedGames": 99,
     "lanes": {
       "moneyline": {
-        "gradedGames": 98,
+        "gradedGames": 99,
         "correct": 57,
-        "accuracyPct": 58.2
+        "accuracyPct": 57.6
       },
       "runline": {
-        "gradedGames": 98,
-        "correct": 52,
-        "accuracyPct": 53.1
+        "gradedGames": 99,
+        "correct": 53,
+        "accuracyPct": 53.5
       },
       "total": {
         "gradedGames": 95,
