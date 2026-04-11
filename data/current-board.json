@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-11T00:36:18.525170+00:00",
+    "generatedAt": "2026-04-11T00:46:26.800879+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-10",
     "refreshDays": 2,
@@ -11,15 +11,27 @@
     "roiThresholds": {
       "moneyline": {
         "confidencePct": 70.0,
-        "label": "ML 70%+"
+        "label": "ML 70%+",
+        "roiPct": 38.174,
+        "winRatePct": 76.989,
+        "bets": 352,
+        "source": "classifier_2025_test"
       },
       "runline": {
-        "confidencePct": 70.0,
-        "label": "RL 70%+"
+        "confidencePct": 65.0,
+        "label": "RL 65%+",
+        "roiPct": 1.579,
+        "winRatePct": 63.14,
+        "bets": 1172,
+        "source": "blend_2025_backtest"
       },
       "total": {
         "confidencePct": 60.0,
-        "label": "Total 60%+"
+        "label": "Total 60%+",
+        "roiPct": 8.698,
+        "winRatePct": 55.248,
+        "bets": 867,
+        "source": "blend_2025_backtest"
       }
     },
     "boardDate": "2026-04-10",
@@ -1193,7 +1205,7 @@
       "market_runline": "NYA -1.5 / TBA +1.5",
       "projected_runline_edge": 0.338,
       "moneyline_roi_play": true,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     },
     {
@@ -1251,7 +1263,7 @@
       "market_runline": "TEX +1.5 / LAN -1.5",
       "projected_runline_edge": 0.309,
       "moneyline_roi_play": true,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     },
     {
@@ -1541,7 +1553,7 @@
       "market_runline": "BOS -1.5 / SLN +1.5",
       "projected_runline_edge": 0.362,
       "moneyline_roi_play": true,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     },
     {
@@ -1831,7 +1843,7 @@
       "market_runline": "PIT +1.5 / CHN -1.5",
       "projected_runline_edge": 0.308,
       "moneyline_roi_play": false,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     }
   ],
@@ -1949,7 +1961,7 @@
       "market_runline": "COL +1.5 / SDN -1.5",
       "projected_runline_edge": null,
       "moneyline_roi_play": false,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     },
     {
@@ -2065,7 +2077,7 @@
       "market_runline": "CHA +1.5 / KCA -1.5",
       "projected_runline_edge": null,
       "moneyline_roi_play": false,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     },
     {
@@ -2239,7 +2251,7 @@
       "market_runline": "PIT +1.5 / CHN -1.5",
       "projected_runline_edge": null,
       "moneyline_roi_play": false,
-      "runline_roi_play": false,
+      "runline_roi_play": true,
       "total_roi_play": true
     }
   ]
