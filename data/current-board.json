@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-10T23:55:45.866413+00:00",
+    "generatedAt": "2026-04-11T00:05:53.615389+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-10",
     "refreshDays": 2,
@@ -55,23 +55,23 @@
       "moneyline": {
         "label": "Moneyline",
         "thresholdPct": 70.0,
-        "roiPct": 7.9,
-        "bets": 146,
-        "winRatePct": 69.9
+        "roiPct": 1.13,
+        "bets": 63,
+        "winRatePct": 65.1
       },
       "runline": {
         "label": "Runline",
-        "thresholdPct": 70.0,
-        "roiPct": 1.86,
-        "bets": 610,
-        "winRatePct": 64.1
+        "thresholdPct": 65.0,
+        "roiPct": 1.58,
+        "bets": 1172,
+        "winRatePct": 63.1
       },
       "totals": {
         "label": "Total",
         "thresholdPct": 60.0,
-        "roiPct": 8.85,
-        "bets": 872,
-        "winRatePct": 55.3
+        "roiPct": 8.7,
+        "bets": 867,
+        "winRatePct": 55.2
       }
     }
   },
