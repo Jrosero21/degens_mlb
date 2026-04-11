@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-11T01:26:57.643788+00:00",
+    "generatedAt": "2026-04-11T01:32:23.766250+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-10",
     "refreshDays": 2,
@@ -10,11 +10,11 @@
     "totalGameCount": 36,
     "roiThresholds": {
       "moneyline": {
-        "confidencePct": 60.0,
-        "label": "ML 60%+",
-        "roiPct": 4.37,
-        "winRatePct": 56.209,
-        "bets": 153,
+        "confidencePct": 62.0,
+        "label": "ML 62%+",
+        "roiPct": 6.012,
+        "winRatePct": 57.639,
+        "bets": 144,
         "source": "live_2026",
         "isProfitable": true
       },
@@ -511,7 +511,7 @@
       "projection_stage": "shadow_retrained_2026",
       "market_runline": "NYA -1.5 / TBA +1.5",
       "projected_runline_edge": null,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
@@ -627,7 +627,7 @@
       "projection_stage": "shadow_retrained_2026",
       "market_runline": "BOS -1.5 / SLN +1.5",
       "projected_runline_edge": null,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
@@ -743,7 +743,7 @@
       "projection_stage": "shadow_retrained_2026",
       "market_runline": "MIN +1.5 / TOR -1.5",
       "projected_runline_edge": null,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
@@ -1555,7 +1555,7 @@
       "projection_stage": "early",
       "market_runline": "MIN -1.5 / TOR +1.5",
       "projected_runline_edge": 0.576,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
@@ -1789,7 +1789,7 @@
       "projection_stage": "shadow_retrained_2026",
       "market_runline": "COL +1.5 / SDN -1.5",
       "projected_runline_edge": null,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
@@ -1963,7 +1963,7 @@
       "projection_stage": "shadow_retrained_2026",
       "market_runline": "ATH +1.5 / NYA -1.5",
       "projected_runline_edge": null,
-      "moneyline_roi_play": true,
+      "moneyline_roi_play": false,
       "runline_roi_play": true,
       "total_roi_play": true
     },
