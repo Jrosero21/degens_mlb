@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-11T00:26:10.589553+00:00",
+    "generatedAt": "2026-04-11T00:36:18.525170+00:00",
     "dbName": "jonnyrosero_score",
     "refreshStartDate": "2026-04-10",
     "refreshDays": 2,
@@ -38,14 +38,14 @@
       },
       "runline": {
         "gradedGames": 189,
-        "correct": 107,
-        "accuracyPct": 56.6
+        "correct": 109,
+        "accuracyPct": 57.7
       },
       "total": {
         "gradedGames": 178,
-        "correct": 92,
+        "correct": 90,
         "pushes": 8,
-        "accuracyPct": 51.7
+        "accuracyPct": 50.6
       }
     }
   },
