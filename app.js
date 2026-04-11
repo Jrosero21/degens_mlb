@@ -155,9 +155,16 @@ function buildGameCard(game) {
   if (Number(game.is_stay_away) === 1) badges.appendChild(makeTag("Stay Away", "tag-red"));
   if (game.edge_tier_label) badges.appendChild(makeTag(game.edge_tier_label));
   if (game.model_vs_market === "DISAGREE") badges.appendChild(makeTag("Model vs Vegas", "tag-yellow"));
-  if (game.moneyline_roi_play) badges.appendChild(makeTag("ML 70%+", "tag-green"));
-  if (game.runline_roi_play) badges.appendChild(makeTag("RL 70%+"));
-  if (game.total_roi_play) badges.appendChild(makeTag("Total 60%+", "tag-yellow"));
+  // Badge labels come from the dynamic sweet-spot thresholds in meta.roiThresholds
+  // (computed by compute_sweet_spots.py). They update as the best ROI tier
+  // shifts over time, so the UI always highlights the current sweet spot.
+  const thresholds = window.__boardMeta?.roiThresholds || {};
+  const mlLabel = thresholds.moneyline?.label || "ML 70%+";
+  const rlLabel = thresholds.runline?.label   || "RL 65%+";
+  const ouLabel = thresholds.total?.label     || "Total 60%+";
+  if (game.moneyline_roi_play) badges.appendChild(makeTag(mlLabel, "tag-green"));
+  if (game.runline_roi_play)   badges.appendChild(makeTag(rlLabel));
+  if (game.total_roi_play)     badges.appendChild(makeTag(ouLabel, "tag-yellow"));
 
   card.querySelector(".summary-winner").textContent = displayTeam(game.projected_winner);
   card.querySelector(".summary-confidence").textContent = fmtPct(game.projected_confidence_pct);
@@ -352,6 +359,21 @@ async function loadBoard() {
   heroSubtitleEl.textContent = payload.meta?.refreshStartDate
     ? `Showing the live board for ${payload.meta.boardDate} plus tomorrow when available. Prior dates move into Recent Results.`
     : `Using the latest exported board for ${payload.meta?.boardTimezone || "the current board timezone"}.`;
+
+  // Populate the sweet-spot dictionary text with live threshold labels + ROI.
+  const sweetSpotEl = document.getElementById("sweet-spot-dictionary-text");
+  if (sweetSpotEl) {
+    const thr = payload.meta?.roiThresholds || {};
+    const ml = thr.moneyline, rl = thr.runline, ou = thr.total;
+    const fmtPctStr = (v) => v == null ? "" : `${v > 0 ? "+" : ""}${Number(v).toFixed(1)}%`;
+    const parts = [];
+    if (ml?.label) parts.push(`<code>${ml.label}</code>${ml.roiPct != null ? ` (${fmtPctStr(ml.roiPct)} ROI)` : ""}`);
+    if (rl?.label) parts.push(`<code>${rl.label}</code>${rl.roiPct != null ? ` (${fmtPctStr(rl.roiPct)} ROI)` : ""}`);
+    if (ou?.label) parts.push(`<code>${ou.label}</code>${ou.roiPct != null ? ` (${fmtPctStr(ou.roiPct)} ROI)` : ""}`);
+    if (parts.length) {
+      sweetSpotEl.innerHTML = `Current sweet-spot tiers: ${parts.join(", ")}. Updates automatically as the model's best-ROI confidence level shifts.`;
+    }
+  }
 
   renderAccuracy(payload.accuracy);
   renderFeatured(payload.featured || []);
