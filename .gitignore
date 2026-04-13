@@ -1,1 +1,6 @@
+# Work-in-progress UI files — not part of the auto-publish pipeline
+api/
+mockup.html
+package.json
+node_modules/
 .DS_Store
