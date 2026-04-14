@@ -333,6 +333,44 @@ body {
   border-color: rgba(242, 201, 76, 0.28);
 }
 
+.tag-final {
+  background: rgba(111, 181, 255, 0.12);
+  color: var(--market-accent);
+  border-color: rgba(111, 181, 255, 0.28);
+}
+
+.game-result-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 6px;
+  border-top: 1px solid var(--panel-border);
+  font-size: 13px;
+}
+
+.game-result-score {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.game-result-outcome {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.result-correct {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.result-wrong {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
 .filters {
   display: flex;
   gap: 8px;

@@ -4,6 +4,7 @@ const featuredGrid = document.getElementById("featured-grid");
 const boardList = document.getElementById("board-list");
 const recentResultsSection = document.getElementById("recent-results-section");
 const recentResultsList = document.getElementById("recent-results-list");
+const recentResultsSubtitle = document.getElementById("recent-results-subtitle");
 const generatedAtEl = document.getElementById("generated-at");
 const gameCountEl = document.getElementById("game-count");
 const heroSubtitleEl = document.getElementById("hero-subtitle");
@@ -204,6 +205,27 @@ function buildGameCard(game) {
   if (totalEdge > 0) totalPickEl.style.color = "var(--green)";
   if (totalEdge < 0) totalPickEl.style.color = "var(--red)";
 
+  // Show actual final score for settled games
+  const resultLine = card.querySelector(".game-result-line");
+  if (game.actual_away_runs != null && game.actual_home_runs != null) {
+    resultLine.hidden = false;
+    const awayDisplay = displayTeam(game.away_team);
+    const homeDisplay = displayTeam(game.home_team);
+    resultLine.querySelector(".game-result-score").textContent =
+      `Final: ${awayDisplay} ${game.actual_away_runs} – ${homeDisplay} ${game.actual_home_runs}`;
+    const outcomeEl = resultLine.querySelector(".game-result-outcome");
+    if (game.pick_correct === true) {
+      outcomeEl.textContent = "✓ Correct";
+      outcomeEl.className = "game-result-outcome result-correct";
+    } else if (game.pick_correct === false) {
+      outcomeEl.textContent = "✗ Wrong";
+      outcomeEl.className = "game-result-outcome result-wrong";
+    } else {
+      outcomeEl.textContent = "";
+    }
+    badges.appendChild(makeTag("Final", "tag-final"));
+  }
+
   head.addEventListener("click", () => {
     expandedGameId = expandedGameId === game.gamePk ? null : game.gamePk;
     renderGames();
@@ -275,6 +297,23 @@ function renderRecentGames() {
   if (!hasRecentGames) {
     recentResultsList.innerHTML = "";
     return;
+  }
+
+  if (recentResultsSubtitle) {
+    const settled = recentGames.filter((g) => g.actual_away_runs != null).length;
+    const total = recentGames.length;
+    const correct = recentGames.filter((g) => g.pick_correct === true).length;
+    const graded = recentGames.filter((g) => g.pick_correct != null).length;
+    const dateStr = recentGames[0]
+      ? fmtDate(recentGames[0].board_display_date || recentGames[0].game_date)
+      : "Yesterday";
+    if (settled > 0 && graded > 0) {
+      recentResultsSubtitle.textContent = `${dateStr} · ${settled} of ${total} final · ${correct}/${graded} picks correct`;
+    } else if (settled > 0) {
+      recentResultsSubtitle.textContent = `${dateStr} · ${settled} final${total > settled ? `, ${total - settled} pending` : ""}`;
+    } else {
+      recentResultsSubtitle.textContent = `${dateStr} · ${total} game${total === 1 ? "" : "s"} · results pending`;
+    }
   }
 
   renderGameCards(recentResultsList, recentGames, "No recent games to show.");
