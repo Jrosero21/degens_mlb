@@ -205,23 +205,29 @@ function buildGameCard(game) {
   if (totalEdge > 0) totalPickEl.style.color = "var(--green)";
   if (totalEdge < 0) totalPickEl.style.color = "var(--red)";
 
-  // Show actual final score for settled games
-  const resultLine = card.querySelector(".game-result-line");
+  // Override glance blocks with actual results for settled games
   if (game.actual_away_runs != null && game.actual_home_runs != null) {
-    resultLine.hidden = false;
     const awayDisplay = displayTeam(game.away_team);
     const homeDisplay = displayTeam(game.home_team);
-    resultLine.querySelector(".game-result-score").textContent =
-      `Final: ${awayDisplay} ${game.actual_away_runs} – ${homeDisplay} ${game.actual_home_runs}`;
-    const outcomeEl = resultLine.querySelector(".game-result-outcome");
-    if (game.pick_correct === true) {
-      outcomeEl.textContent = "✓ Correct";
-      outcomeEl.className = "game-result-outcome result-correct";
-    } else if (game.pick_correct === false) {
-      outcomeEl.textContent = "✗ Wrong";
-      outcomeEl.className = "game-result-outcome result-wrong";
-    } else {
-      outcomeEl.textContent = "";
+    const scoreEl = card.querySelector(".summary-winner");
+    const outcomeEl = card.querySelector(".summary-confidence");
+    const winnerLabelEl = scoreEl ? scoreEl.closest(".glance-block")?.querySelector(".glance-label") : null;
+    const outcomeLabelEl = outcomeEl ? outcomeEl.closest(".glance-block")?.querySelector(".glance-label") : null;
+    if (scoreEl) {
+      if (winnerLabelEl) winnerLabelEl.textContent = "Final";
+      scoreEl.textContent = `${awayDisplay} ${game.actual_away_runs} – ${homeDisplay} ${game.actual_home_runs}`;
+    }
+    if (outcomeEl) {
+      if (outcomeLabelEl) outcomeLabelEl.textContent = "Pick";
+      if (game.pick_correct === true) {
+        outcomeEl.textContent = "✓ Correct";
+        outcomeEl.style.color = "var(--green)";
+      } else if (game.pick_correct === false) {
+        outcomeEl.textContent = "✗ Wrong";
+        outcomeEl.style.color = "var(--red)";
+      } else {
+        outcomeEl.textContent = "—";
+      }
     }
     badges.appendChild(makeTag("Final", "tag-final"));
   }
